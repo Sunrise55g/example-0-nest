@@ -50,34 +50,18 @@ export class AuthController {
   }
 
 
-  // login by email
-  @Post('login/email')
+  // login
+  @Post('login')
   @HttpCode(200)
-  @ApiOperation({ summary: 'Login by Email' })
+  @ApiOperation({ summary: 'Login by Email | Username' })
   @ApiBody({
     schema: {
-      example: { email: 'user@example.com', password: 'Password' },
+      example: { login: 'user@example.com', password: 'Password' },
     },
   })
   @ApiResponse({ status: 200, type: AuthLoginSuccessDto })
   async loginByEmail(@Body() body) {
-    return this.authService.loginByEmail(body.email, body.password);
-  }
-
-
-  // login by username
-  @Post('login/username')
-  @HttpCode(200)
-  @UseGuards(LocalAuthGuard)
-  @ApiOperation({ summary: 'Login by Username' })
-  @ApiBody({
-    schema: {
-      example: { username: 'user', password: 'Password' },
-    },
-  })
-  @ApiResponse({ status: 200, type: AuthLoginSuccessDto })
-  async loginByUsername(@Request() req) {
-    return this.authService.loginByUsername(req.user);
+    return this.authService.login(body.login, body.password);
   }
 
 

@@ -100,10 +100,14 @@ export class AuthService {
 
 
   //// Login
+  async login(login: string, password: string): Promise<any> {
 
-  // login by email
-  async loginByEmail(email: string, password: string): Promise<any> {
-    const userObj = await this.profileUsersService.findOneByEmail(email);
+    //
+    let userObj = await this.profileUsersService.findOneByEmail(login);
+
+    if (!userObj) {
+      userObj = await this.profileUsersService.findOneByLogin(login);
+    }
 
     //
     if (!userObj) {
@@ -128,7 +132,7 @@ export class AuthService {
       return result;
     }
 
-    throw new UnauthorizedException('Email or password are incorrect!');
+    throw new UnauthorizedException('Email | Login or password are incorrect!');
   }
 
 
