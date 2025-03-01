@@ -38,6 +38,8 @@ export class AuthService {
 
   async registration(dto: AuthRegistrationReqDto) {
 
+    console.log(dto);
+
     //// create user
     if (typeof dto['username'] === 'undefined') {
       if (typeof dto['email'] !== 'undefined') {
@@ -67,7 +69,7 @@ export class AuthService {
 
 
     const result = {
-      profile_users: new_profile_users,
+      user: new_profile_users,
       token: token,
     };
 

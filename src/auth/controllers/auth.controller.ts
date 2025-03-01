@@ -44,6 +44,8 @@ export class AuthController {
   registration(
     @Body() authBeginByEmailFinalDto: AuthRegistrationReqDto,
   ) {
+
+    console.log(authBeginByEmailFinalDto);
     return this.authService.registration(
       authBeginByEmailFinalDto,
     );

@@ -50,7 +50,7 @@ export class AuthRegistrationReqDto {
 
 export class AuthRegistrationResSuccessDto {
   @ApiProperty({ type: ProfileUsersReadResDto })
-  readonly profile_users: ProfileUsersReadResDto;
+  readonly user: ProfileUsersReadResDto;
 
   @ApiProperty({ example: '4y5tw45yh45tw34ty435ty453345324', description: 'Token' })
   readonly token: string;
