@@ -63,7 +63,7 @@ export class ProfileUsersCoreController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: ProfileUsersReadBulkResDto })
   findAll(@Request() req, @Query() dto: QueryBulkDto) {
-    console.log(req.user);
+    // console.log(req);
     return this.profileUsersService.findAll(dto);
   }
 
