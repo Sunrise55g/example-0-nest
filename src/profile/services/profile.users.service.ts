@@ -265,6 +265,8 @@ export class ProfileUsersService {
       page: page,
       pageCount: pageCount,
     };
+
+    console.log('result', {result});
     return result;
   }
 
