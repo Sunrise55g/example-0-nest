@@ -15,6 +15,7 @@ import { AppService } from './app.service';
 import { ProfileModule } from './profile/profile.module';
 import { AuthModule } from './auth/auth.module';
 import { PartsModule } from './parts/parts.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 
 
@@ -58,7 +59,8 @@ import { PartsModule } from './parts/parts.module';
     ////
     AuthModule,
     ProfileModule,
-    PartsModule
+    PartsModule,
+    TicketsModule
     
   ],
 
