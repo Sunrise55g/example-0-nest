@@ -55,8 +55,8 @@ export class PartsCategoriesCoreController {
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: PartsCategoriesReadBulkResDto })
-  findAll(@Query() dto: QueryBulkDto) {
-    return this.partsCategoriesService.findAll(dto);
+  findMany(@Query() dto: QueryBulkDto) {
+    return this.partsCategoriesService.findMany(dto);
   }
 
   

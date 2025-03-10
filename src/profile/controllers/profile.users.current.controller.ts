@@ -29,18 +29,15 @@ import { ProfileUsersUpdateReqDto, ProfileUsersUpdatePasswordReqDto } from '../d
 import { ProfileUsersService } from '../services/profile.users.service';
 
 
-
-
-
 @ApiTags('Profile Users Current')
-@Controller('profile/user/current')
+@Controller('profile/users/current')
 export class ProfileUserCurrentController {
   constructor(
     private readonly profileUsersService: ProfileUsersService,
-  ) {}
-  
+  ) { }
 
-  
+
+
   @Get()
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -71,6 +68,23 @@ export class ProfileUserCurrentController {
   @ApiResponse({ status: 200, type: ProfileUsersReadResDto })
   updatePassword(@Request() req, @Body() dto: ProfileUsersUpdatePasswordReqDto) {
     return this.profileUsersService.updatePassword(req.user.id, dto);
+  }
+
+
+  @Get('/totalCount')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get total count' })
+  @ApiResponse({ status: 200, type: Number })
+  async totalCount() {
+    const dto = {
+      fields: [`id`],
+      joinDisable: true
+    } as unknown as QueryBulkDto
+
+    const usersList = await this.profileUsersService.findMany(dto)
+    const count = usersList.count || 0;
+
+    return count;
   }
 
 

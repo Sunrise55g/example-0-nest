@@ -210,7 +210,7 @@ export class ProfileUsersService {
 
 
 
-  async findAll(dto: QueryBulkDto) {
+  async findMany(dto?: QueryBulkDto) {
     //
     const repo = this.profileUsersRepo;
     const dbTable = 'profile_users';
@@ -220,17 +220,19 @@ export class ProfileUsersService {
       .createQueryBuilder(dbTable)
 
     // params from query
-    query = fieldsHandler(dto, dbTable, query);
-    query = searchHandler(dto, dbTable, query);
-    query = filterHandler(dto, dbTable, query);
-    query = sortHandler(dto, dbTable, query);
-    query = joinHandler(dto, dbTable, query);
+    if (!dto) {
+      query = fieldsHandler(dto, dbTable, query);
+      query = searchHandler(dto, dbTable, query);
+      query = filterHandler(dto, dbTable, query);
+      query = sortHandler(dto, dbTable, query);
+      query = joinHandler(dto, dbTable, query);
+    }
 
     // pagination
     const total = await query.getCount();
-    const limit = dto.limit;
-    let offset = dto.offset;
-    let page = dto.page;
+    const limit = dto.limit | 10;
+    let offset = dto.offset | 0;
+    let page = dto.page | 1;
 
     const pageCount = Math.ceil(total / limit);
     if (page < 1) {
@@ -266,7 +268,6 @@ export class ProfileUsersService {
       pageCount: pageCount,
     };
 
-    console.log('result', {result});
     return result;
   }
 
@@ -432,8 +433,8 @@ export class ProfileUsersService {
 
     const user = await this.profileUsersRepo.findOne({
       where: { id: id },
-      relations: { 
-        profileRole: true 
+      relations: {
+        profileRole: true
       },
     });
 

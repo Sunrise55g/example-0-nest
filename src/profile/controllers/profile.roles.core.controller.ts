@@ -55,8 +55,8 @@ export class ProfileRolesCoreController {
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: ProfileRolesReadBulkResDto })
-  findAll(@Query() dto: QueryBulkDto) {
-    return this.profileRolesService.findAll(dto);
+  findMany(@Query() dto: QueryBulkDto) {
+    return this.profileRolesService.findMany(dto);
   }
 
   

@@ -45,7 +45,7 @@ export class ProfileRolesService {
 
 
 
-  async findAll(dto: QueryBulkDto) {
+  async findMany(dto: QueryBulkDto) {
     //
     const repo = this.roleRepository;
     const dbTable = 'profile_roles';

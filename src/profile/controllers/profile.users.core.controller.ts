@@ -62,9 +62,9 @@ export class ProfileUsersCoreController {
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: ProfileUsersReadBulkResDto })
-  findAll(@Request() req, @Query() dto: QueryBulkDto) {
+  findMany(@Request() req, @Query() dto: QueryBulkDto) {
     // console.log(req);
-    return this.profileUsersService.findAll(dto);
+    return this.profileUsersService.findMany(dto);
   }
 
 

@@ -44,7 +44,7 @@ export class PartsCategoriesService {
 
 
 
-  async findAll(dto: QueryBulkDto) {
+  async findMany(dto: QueryBulkDto) {
     //
     const repo = this.partsCategoriesRepo;
     const dbTable = 'parts_categories';

@@ -55,8 +55,8 @@ export class TicketsCategoriesCoreController {
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: TicketsCategoriesReadBulkResDto })
-  findAll(@Query() dto: QueryBulkDto) {
-    return this.ticketsCategoriesService.findAll(dto);
+  findMany(@Query() dto: QueryBulkDto) {
+    return this.ticketsCategoriesService.findMany(dto);
   }
 
   

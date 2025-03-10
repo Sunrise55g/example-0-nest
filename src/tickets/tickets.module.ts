@@ -22,6 +22,7 @@ import { TicketsItems } from './entities/tickets.items.entity';
 //
 import { TicketsCategoriesCoreController } from './controllers/tickets.categories.core.controller';
 import { TicketsInvoicesCoreController } from './controllers/tickets.invoices.core.controller';
+import { TicketsInvoicesCurrentController } from './controllers/tickets.invoices.current.controller';
 import { TicketsItemsCoreController } from './controllers/tickets.items.core.controller';
 
 //
@@ -61,6 +62,7 @@ import { TicketsItemsService } from './services/tickets.items.service';
   controllers: [
     TicketsCategoriesCoreController,
     TicketsInvoicesCoreController,
+    TicketsInvoicesCurrentController,
     TicketsItemsCoreController
   ],
 

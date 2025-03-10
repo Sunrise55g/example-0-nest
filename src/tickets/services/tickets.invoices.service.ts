@@ -36,6 +36,7 @@ import { TicketsInvoices } from '../entities/tickets.invoices.entity';
 import { TicketsInvoicesCreateReqDto } from '../dto/tickets.invoices.create.dtos';
 import { TicketsInvoicesReadResDto, TicketsInvoicesReadBulkResDto } from '../dto/tickets.invoices.read.dtos';
 import { TicketsInvoicesUpdateReqDto } from '../dto/tickets.invoices.update.dtos';
+import { count } from 'console';
 
 
 
@@ -94,7 +95,7 @@ export class TicketsInvoicesService {
       });
     }
 
-    
+
     //
     const obj = await this.ticketsInvoicesRepo.save(dto);
 
@@ -126,7 +127,7 @@ export class TicketsInvoicesService {
 
 
 
-  async findAll(dto: QueryBulkDto) {
+  async findMany(dto: QueryBulkDto, current: boolean = false, profileUserId?: number) {
     //
     const repo = this.ticketsInvoicesRepo;
     const dbTable = 'tickets_invoices';
@@ -189,7 +190,7 @@ export class TicketsInvoicesService {
         delete dataObj.ticketsItems;
       }
     }
-    
+
 
     //
     const result = {
@@ -205,7 +206,7 @@ export class TicketsInvoicesService {
 
 
 
-  async findOne(id: number, dto: QueryDto) {
+  async findOne(id: number, dto: QueryDto, current: boolean = false, profileUserId?: number) {
     //
     const repo = this.ticketsInvoicesRepo;
     const dbTable = 'tickets_invoices';
@@ -249,7 +250,7 @@ export class TicketsInvoicesService {
       dataObj['partsItems'] = dataObj.ticketsItems.map(ticketItem => ticketItem.partsItem);
       delete dataObj.ticketsItems;
     }
-    
+
 
     return dataObj;
   }
@@ -257,7 +258,7 @@ export class TicketsInvoicesService {
 
 
 
-  async updateOneById(id: number, dto: TicketsInvoicesUpdateReqDto) {
+  async updateOneById(id: number, dto: TicketsInvoicesUpdateReqDto, current: boolean = false, profileUserId?: number) {
 
     //// check data
     //
@@ -303,7 +304,7 @@ export class TicketsInvoicesService {
       }
     }
 
-    
+
     ////
     const obj = await this.ticketsInvoicesRepo.findOne({
       where: {
@@ -350,7 +351,7 @@ export class TicketsInvoicesService {
 
 
 
-  async removeOneById(id: number) {
+  async removeOneById(id: number, current: boolean = false, profileUserId?: number) {
 
     const obj = await this.ticketsInvoicesRepo.findOne({
       where: {
@@ -390,6 +391,114 @@ export class TicketsInvoicesService {
     return objDelete;
   }
 
+
+
+  async totalCount(current: boolean = false, profileUserId?: number) {
+
+    // check for current user
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+
+    //
+    const repo = this.ticketsInvoicesRepo;
+    const dbTable = 'tickets_invoices';
+
+
+    let query = repo
+      .createQueryBuilder(dbTable)
+      .select([`${dbTable}.id, ${dbTable}.createdAt`])
+
+
+    if (current === true) {
+      query.where(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+    }
+
+
+    let data = await query.getRawMany();
+    const count = data.length;
+
+    return count;
+  }
+
+
+
+  async statsByDays(current: boolean = false, profileUserId?: number) {
+
+    //// check for current user
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+
+    ////
+    const today = new Date();
+
+
+    ////
+    const repo = this.ticketsInvoicesRepo;
+    const dbTable = 'tickets_invoices';
+
+    //
+    let query = repo
+      .createQueryBuilder(dbTable)
+      .where(`${dbTable}.createdAt >= :date`, { date: new Date(today.getTime() - 10 * 24 * 60 * 60 * 1000) })
+      .select([`${dbTable}.id, ${dbTable}.createdAt`])
+
+    //
+    if (current === true) {
+      query.andWhere(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+    }
+
+    //
+    let data = await query.getRawMany();
+
+
+    ////
+    let statsByDays = [];
+
+    for (let i = 0; i <= 10; i++) {
+      const date = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
+
+      const dateStr = date.toISOString().split('T')[0]
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const name = `${day}.${month}`;
+
+      statsByDays.push({
+        date: dateStr,
+        name: name,
+        count: 0
+      });
+    }
+
+
+    for (let statsObj of statsByDays) {
+
+      const statsObjDateStr = statsObj.date;
+      // console.log('statsObjDateStr', statsObjDateStr);
+
+      for (let dataObj of data) {
+
+        const dataObjDate = new Date(dataObj.created_at);
+        const dataObjDateStr = dataObjDate.toISOString().split('T')[0]
+        // console.log('dataObjDateStr', dataObjDateStr)
+
+        if (dataObjDateStr == statsObjDateStr) {
+          statsObj.count += 1;
+        }
+      }
+
+    }
+
+    statsByDays.reverse();
+    return statsByDays;
+  }
 
 
 }

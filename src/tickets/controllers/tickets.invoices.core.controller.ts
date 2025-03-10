@@ -57,9 +57,32 @@ export class TicketsInvoicesCoreController {
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: TicketsInvoicesReadBulkResDto })
-  findAll(@Request() req, @Query() dto: QueryBulkDto) {
-    console.log(req.user);
-    return this.ticketsInvoicesService.findAll(dto);
+  findMany(@Request() req, @Query() dto: QueryBulkDto) {
+    return this.ticketsInvoicesService.findMany(dto);
+  }
+
+
+  @Get('totalCount')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @RoleAuth('moderator')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get total count' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: Number })
+  totalCount(@Request() req) {
+    return this.ticketsInvoicesService.totalCount();
+  }
+
+
+  @Get('statsByDays')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @RoleAuth('moderator')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get stats by days' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200 })
+  statsByDays(@Request() req) {
+    return this.ticketsInvoicesService.statsByDays();
   }
 
 
