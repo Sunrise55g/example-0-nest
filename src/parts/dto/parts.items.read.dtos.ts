@@ -29,7 +29,7 @@ export class PartsItemsReadResDto {
   partsCategoryId: number;
 
   @ApiProperty({ type: PartsCategoriesReadResDto })
-  parts_categories: PartsCategoriesReadResDto;
+  partsCategory: PartsCategoriesReadResDto;
 
 
   ////
@@ -57,8 +57,8 @@ export class PartsItemsReadResDto {
 export class PartsItemsReadBulkResDto {
 
   //
-  @ApiProperty({ type: PartsItemsReadResDto })
-  data: PartsItemsReadResDto;
+  @ApiProperty({ type: [PartsItemsReadResDto] })
+  data: PartsItemsReadResDto[];
 
 
   //

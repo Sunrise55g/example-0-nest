@@ -11,9 +11,17 @@ import {
 
 
 ////
+import { ProfileUsersReadResDto } from 'src/profile/dto/profile.users.read.dtos';
+
+////
+
+
+
+////
+import { InvoiceStatusEnum } from '../entities/tickets.invoices.entity';
 import { TicketsCategoriesReadResDto } from './tickets.categories.read.dtos';
 import { PartsItemsReadResDto } from 'src/parts/dto/parts.items.read.dtos';
-import { InvoiceStatusEnum } from '../entities/tickets.invoices.entity';
+
 
 
 
@@ -29,22 +37,23 @@ export class TicketsInvoicesReadResDto {
   ticketsCategoryId: number;
 
   @ApiProperty({ type: TicketsCategoriesReadResDto })
-  tickets_categories: TicketsCategoriesReadResDto;
+  ticketsCategory: TicketsCategoriesReadResDto;
 
 
   ////
   @ApiProperty({ example: 1, description: 'customerUserId'})
   customerUserId: number;
 
+  @ApiProperty({ type: ProfileUsersReadResDto })
+  customerUser: ProfileUsersReadResDto;
+
 
   ////
   @ApiProperty({ example: 1, description: 'employerUserId'})
   employerUserId: number;
 
-
-  ////
-  @ApiProperty({ type: PartsItemsReadResDto })
-  parts_items: PartsItemsReadResDto;
+  @ApiProperty({ type: ProfileUsersReadResDto })
+  employerUser: ProfileUsersReadResDto;
 
 
   ////
@@ -54,11 +63,13 @@ export class TicketsInvoicesReadResDto {
   @ApiProperty({ example: 'Invoice #22222? description', description: 'Invoice description', required: false })
   description: string;
 
- 
-  ////
-  @ApiProperty({ example: false, description: 'Active status', required: false })
-  active: boolean;
 
+  ////
+  @ApiProperty({ type: PartsItemsReadResDto })
+  partsItems: PartsItemsReadResDto;
+
+
+  ////
   @ApiProperty({ example: InvoiceStatusEnum.OPEN, description: 'Ticket status', required: false })
   status: InvoiceStatusEnum;
 
@@ -75,8 +86,8 @@ export class TicketsInvoicesReadResDto {
 export class TicketsInvoicesReadBulkResDto {
 
   //
-  @ApiProperty({ type: TicketsInvoicesReadResDto })
-  data: TicketsInvoicesReadResDto;
+  @ApiProperty({ type: [TicketsInvoicesReadResDto] })
+  data: TicketsInvoicesReadResDto[];
 
 
   //

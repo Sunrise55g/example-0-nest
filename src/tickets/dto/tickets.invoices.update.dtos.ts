@@ -51,10 +51,6 @@ name: string;
 description: string;
 
 ////
-@IsOptional()
-@ApiProperty({ example: true, description: 'Active status', required: false })
-active: boolean;
-
 @ApiProperty({ example: InvoiceStatusEnum.OPEN, description: 'Ticket status', required: false })
 @IsOptional()
 status: InvoiceStatusEnum;

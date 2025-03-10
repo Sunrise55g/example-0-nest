@@ -73,7 +73,7 @@ export class PartsItemsService {
         id: obj.id
       },
       relations: {
-        parts_categories: true,
+        partsCategory: true,
       },
     });
     if (!objCreated) {
@@ -125,7 +125,7 @@ export class PartsItemsService {
     //
     if (!dto.join) {
       query.leftJoinAndSelect(
-        'parts_items.parts_categories', 'parts_categories'
+        'parts_items.partsCategory', 'partsCategory'
       );
     }
 
@@ -166,7 +166,7 @@ export class PartsItemsService {
     //
     if (!dto.join) {
       query.leftJoinAndSelect(
-        'parts_items.parts_categories', 'parts_categories'
+        'parts_items.partsCategory', 'partsCategory'
       );
     }
 
@@ -216,7 +216,7 @@ export class PartsItemsService {
         id: id
       },
       relations: {
-        parts_categories: true,
+        partsCategory: true,
       },
     });
 
@@ -232,7 +232,7 @@ export class PartsItemsService {
         id: id
       },
       relations: {
-        parts_categories: true
+        partsCategory: true
       },
     });
 

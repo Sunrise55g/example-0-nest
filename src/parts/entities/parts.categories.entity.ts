@@ -38,7 +38,7 @@ export class PartsCategories {
 
 
   ////
-  @OneToMany(() => PartsItems, (parts_items) => parts_items.parts_categories)
-  parts_items: PartsItems[];
+  @OneToMany(() => PartsItems, (partsItems) => partsItems.partsCategory)
+  partsItems: PartsItems[];
   
 }

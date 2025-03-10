@@ -22,9 +22,9 @@ export class PartsItems {
   @Column({ name: 'parts_category_id'})
   partsCategoryId: number;
   //
-  @ManyToOne(() => PartsCategories, (parts_categories) => parts_categories.parts_items, {onDelete: "CASCADE"})
+  @ManyToOne(() => PartsCategories, (partsCategory) => partsCategory.partsItems, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'parts_category_id' })
-  parts_categories: PartsCategories;
+  partsCategory: PartsCategories;
 
   
   ////

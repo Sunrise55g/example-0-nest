@@ -9,6 +9,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+////
+import { PartsItemsReadResDto } from 'src/parts/dto/parts.items.read.dtos';
 
 
 export class TicketsItemsReadResDto {
@@ -17,13 +19,18 @@ export class TicketsItemsReadResDto {
   @ApiProperty({ example: 1, description: 'Primary key' })
   id: number;
 
+
   ////
   @ApiProperty({ example: 1, description: 'ticketsInvoiceId'})
   ticketsInvoiceId: number;
 
+
   ////
   @ApiProperty({ example: 1, description: 'partItemId'})
   partItemId: number;
+
+  @ApiProperty({ type: PartsItemsReadResDto })
+  partItem: PartsItemsReadResDto;
 
 
   @ApiProperty({ example: '2025-05-19T20:44:19.360Z', description: 'createdAt' })
@@ -39,8 +46,8 @@ export class TicketsItemsReadResDto {
 export class TicketsItemsReadBulkResDto {
 
   //
-  @ApiProperty({ type: TicketsItemsReadResDto })
-  data: TicketsItemsReadResDto;
+  @ApiProperty({ type: [TicketsItemsReadResDto] })
+  data: TicketsItemsReadResDto[];
 
 
   //

@@ -27,9 +27,9 @@ export class TicketsItems {
   @Column({ name: 'tickets_invoice_id'})
   ticketsInvoiceId: number;
   //
-  @ManyToOne(() => TicketsInvoices, (tickets_invoices) => tickets_invoices.tickets_items, {onDelete: "CASCADE"})
+  @ManyToOne(() => TicketsInvoices, (ticketsInvoice) => ticketsInvoice.ticketsItems, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'tickets_invoice_id' })
-  tickets_invoices: TicketsInvoices;
+  ticketsInvoice: TicketsInvoices;
 
 
   ////
@@ -38,7 +38,7 @@ export class TicketsItems {
   //
   @ManyToOne(() => PartsItems, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'parts_item_id' })
-  parts_items: PartsItems;
+  partsItem: PartsItems;
 
 
   @CreateDateColumn({name: 'created_at'})

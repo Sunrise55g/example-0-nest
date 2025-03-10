@@ -29,7 +29,7 @@ export class ProfileUsersReadResDto {
   profileRoleId: number;
 
   @ApiProperty({ type: ProfileRolesReadResDto })
-  profile_roles: ProfileRolesReadResDto;
+  profileRole: ProfileRolesReadResDto;
 
   @ApiProperty({ example: 'user', description: 'Username' })
   username: string;
@@ -66,8 +66,8 @@ export class ProfileUsersReadResDto {
 export class ProfileUsersReadBulkResDto {
 
   //
-  @ApiProperty({ type: ProfileUsersReadResDto })
-  data: ProfileUsersReadResDto;
+  @ApiProperty({ type: [ProfileUsersReadResDto] })
+  data: ProfileUsersReadResDto[];
 
 
   //

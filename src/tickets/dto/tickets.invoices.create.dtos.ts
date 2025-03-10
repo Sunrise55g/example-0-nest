@@ -35,12 +35,6 @@ export class TicketsInvoicesCreateReqDto {
   })
   description: string;
 
-  
-  ////
-  @IsOptional()
-  @ApiProperty({ example: true, description: 'Active status', required: false })
-  active: boolean;
-
 }
 
 

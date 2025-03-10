@@ -52,8 +52,8 @@ export class ProfileRolesReadResDto {
 export class ProfileRolesReadBulkResDto {
 
   //
-  @ApiProperty({ type: ProfileRolesReadResDto })
-  data: ProfileRolesReadResDto;
+  @ApiProperty({ type: [ProfileRolesReadResDto] })
+  data: ProfileRolesReadResDto[];
 
 
   //

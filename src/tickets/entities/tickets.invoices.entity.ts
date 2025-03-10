@@ -33,9 +33,9 @@ export class TicketsInvoices {
   @Column({ name: 'tickets_category_id'})
   ticketsCategoryId: number;
   //
-  @ManyToOne(() => TicketsCategories, (tickets_categories) => tickets_categories.tickets_invoices, {onDelete: "CASCADE"})
+  @ManyToOne(() => TicketsCategories, (ticketsCategory) => ticketsCategory.ticketsInvoices, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'tickets_category_id' })
-  tickets_categories: TicketsCategories;
+  ticketsCategory: TicketsCategories;
 
 
   ////
@@ -44,7 +44,7 @@ export class TicketsInvoices {
   //
   @ManyToOne(() => ProfileUsers, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'customer_user_id' })
-  customer_user: ProfileUsers;
+  customerUser: ProfileUsers;
 
   ////
   @Column({ name: 'employer_user_id', nullable: true })
@@ -52,7 +52,7 @@ export class TicketsInvoices {
   //
   @ManyToOne(() => ProfileUsers, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'employer_user_id' })
-  employer_user: ProfileUsers;
+  employerUser: ProfileUsers;
 
   
   ////
@@ -64,9 +64,6 @@ export class TicketsInvoices {
 
   
   ////
-  @Column({ default: true })
-  active: boolean;
-
   @Column({ type: 'enum', enum: InvoiceStatusEnum, default: InvoiceStatusEnum.OPEN })
   status: InvoiceStatusEnum;
 
@@ -77,7 +74,7 @@ export class TicketsInvoices {
   updatedAt: Date;
 
   ////
-  @OneToMany(() => TicketsItems, (tickets_items) => tickets_items.tickets_invoices)
-  tickets_items: TicketsItems[];
+  @OneToMany(() => TicketsItems, (ticketsItems) => ticketsItems.ticketsInvoice)
+  ticketsItems: TicketsItems[];
 
 }

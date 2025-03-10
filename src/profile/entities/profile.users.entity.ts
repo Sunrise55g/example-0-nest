@@ -22,9 +22,9 @@ export class ProfileUsers {
   @Column({ name: 'profile_role_id', nullable: true })
   profileRoleId: number;
   //
-  @ManyToOne(() => ProfileRoles, (profile_roles) => profile_roles.profile_users, {onDelete: "CASCADE"})
+  @ManyToOne(() => ProfileRoles, (profileRole) => profileRole.profileUsers, {onDelete: "CASCADE"})
   @JoinColumn({ name: 'profile_role_id' })
-  profile_roles: ProfileRoles;
+  profileRole: ProfileRoles;
 
   @Column({ unique: true, nullable: true })
   username: string;

@@ -58,7 +58,7 @@ export class ProfileUsersService {
 
       // for roles
       .leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles',
+        'profile_users.profileRole', 'profileRole',
       )
 
       .getOne();
@@ -79,7 +79,7 @@ export class ProfileUsersService {
 
       // for roles
       .leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles',
+        'profile_users.profileRole', 'profileRole',
       )
 
       .getOne();
@@ -103,7 +103,7 @@ export class ProfileUsersService {
 
       // for roles
       .leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles',
+        'profile_users.profileRole', 'profileRole',
       )
       .getOne();
 
@@ -122,7 +122,7 @@ export class ProfileUsersService {
 
       // for roles
       .leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles',
+        'profile_users.profileRole', 'profileRole',
       )
 
       .getOne();
@@ -197,7 +197,7 @@ export class ProfileUsersService {
     const userCreated = await this.profileUsersRepo.findOne({
       where: { id: userCreate.id },
       relations: {
-        profile_roles: true,
+        profileRole: true,
       },
     });
     if (!userCreated) {
@@ -249,7 +249,7 @@ export class ProfileUsersService {
     //
     if (!dto.join) {
       query.leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles'
+        'profile_users.profileRole', 'profileRole'
       );
     }
 
@@ -292,7 +292,7 @@ export class ProfileUsersService {
     //
     if (!dto.join) {
       query.leftJoinAndSelect(
-        'profile_users.profile_roles', 'profile_roles'
+        'profile_users.profileRole', 'profileRole'
       );
     }
 
@@ -372,7 +372,7 @@ export class ProfileUsersService {
     const userUpdated = await this.profileUsersRepo.findOne({
       where: { id: id },
       relations: {
-        profile_roles: true,
+        profileRole: true,
       },
     });
 
@@ -417,7 +417,7 @@ export class ProfileUsersService {
     const userUpdated = await this.profileUsersRepo.findOne({
       where: { id: id },
       relations: {
-        profile_roles: true,
+        profileRole: true,
       },
     });
 
@@ -432,7 +432,9 @@ export class ProfileUsersService {
 
     const user = await this.profileUsersRepo.findOne({
       where: { id: id },
-      relations: { profile_roles: true },
+      relations: { 
+        profileRole: true 
+      },
     });
 
     if (!user) {

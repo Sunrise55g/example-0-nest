@@ -44,7 +44,7 @@ export class ProfileRoles {
 
 
   ////
-  @OneToMany(() => ProfileUsers, (profile_users) => profile_users.profile_roles)
-  profile_users: ProfileUsers[];
+  @OneToMany(() => ProfileUsers, (profileUsers) => profileUsers.profileRole)
+  profileUsers: ProfileUsers[];
   
 }

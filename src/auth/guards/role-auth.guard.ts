@@ -61,15 +61,15 @@ export class RoleGuard implements CanActivate {
 
       if (
         requiredRole.includes('moderator') &&
-        (user.profile_roles.moderator == true ||
-          user.profile_roles.administrator == true)
+        (user.profileRole.moderator == true ||
+          user.profileRole.administrator == true)
       ) {
         allow = true;
       }
 
       if (
         requiredRole.includes('administrator') &&
-        user.profile_roles.administrator == true
+        user.profileRole.administrator == true
       ) {
         allow = true;
       }

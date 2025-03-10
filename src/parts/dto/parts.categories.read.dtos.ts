@@ -44,8 +44,8 @@ export class PartsCategoriesReadResDto {
 export class PartsCategoriesReadBulkResDto {
 
   //
-  @ApiProperty({ type: PartsCategoriesReadResDto })
-  data: PartsCategoriesReadResDto;
+  @ApiProperty({ type: [PartsCategoriesReadResDto] })
+  data: PartsCategoriesReadResDto[];
 
 
   //

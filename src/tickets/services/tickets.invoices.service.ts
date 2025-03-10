@@ -103,13 +103,22 @@ export class TicketsInvoicesService {
         id: obj.id
       },
       relations: {
-        // profile_users: true,
-        tickets_categories: true,
+        ticketsCategory: true,
+        customerUser: {
+          profileRole: true
+        },
+        employerUser: {
+          profileRole: true
+        }
       },
     });
     if (!objCreated) {
       throw new InternalServerErrorException();
     }
+
+
+    //
+    obj['partsItems'] = []
 
     return objCreated;
   }
@@ -155,13 +164,32 @@ export class TicketsInvoicesService {
 
     //
     if (!dto.join) {
-      // query.leftJoinAndSelect('tickets_invoices.tickets_categories', 'tickets_categories');
-  
+      query.leftJoinAndSelect('tickets_invoices.ticketsCategory', 'ticketsCategory');
+
+      query.leftJoinAndSelect('tickets_invoices.customerUser', 'customerUser');
+      query.leftJoinAndSelect('customerUser.profileRole', 'customerUser.profileRole');
+
+      query.leftJoinAndSelect('tickets_invoices.employerUser', 'employerUser');
+      query.leftJoinAndSelect('employerUser.profileRole', 'employerUser.profileRole');
+
+      query.leftJoinAndSelect('tickets_invoices.ticketsItems', 'ticketsItems');
+      query.leftJoinAndSelect('ticketsItems.partsItem', 'partsItem');
+      query.leftJoinAndSelect('partsItem.partsCategory', 'partsCategory');
     }
 
     //
-    const data = await query.getMany();
+    let data = await query.getMany();
     const count = data.length;
+
+
+    //
+    for (let dataObj of data) {
+      if (dataObj.ticketsItems) {
+        dataObj['partsItems'] = dataObj.ticketsItems.map(ticketItem => ticketItem.partsItem);
+        delete dataObj.ticketsItems;
+      }
+    }
+    
 
     //
     const result = {
@@ -195,16 +223,35 @@ export class TicketsInvoicesService {
 
     //
     if (!dto.join) {
-      query.leftJoinAndSelect('tickets_invoices.tickets_categories', 'tickets_categories');
+      query.leftJoinAndSelect('tickets_invoices.ticketsCategory', 'ticketsCategory');
+
+      query.leftJoinAndSelect('tickets_invoices.customerUser', 'customerUser');
+      query.leftJoinAndSelect('customerUser.profileRole', 'customerUser.profileRole');
+
+      query.leftJoinAndSelect('tickets_invoices.employerUser', 'employerUser');
+      query.leftJoinAndSelect('employerUser.profileRole', 'employerUser.profileRole');
+
+      query.leftJoinAndSelect('tickets_invoices.ticketsItems', 'ticketsItems');
+      query.leftJoinAndSelect('ticketsItems.partsItem', 'partsItem');
+      query.leftJoinAndSelect('partsItem.partsCategory', 'partsCategory');
     }
 
+
     //
-    const data = await query.getOne();
-    if (!data) {
+    const dataObj = await query.getOne();
+    if (!dataObj) {
       throw new NotFoundException();
     }
 
-    return data;
+
+    //
+    if (dataObj.ticketsItems) {
+      dataObj['partsItems'] = dataObj.ticketsItems.map(ticketItem => ticketItem.partsItem);
+      delete dataObj.ticketsItems;
+    }
+    
+
+    return dataObj;
   }
 
 
@@ -270,15 +317,33 @@ export class TicketsInvoicesService {
     //
     const objUpdate = await this.ticketsInvoicesRepo.save({ id, ...dto });
 
-    const objUpdated = await this.ticketsInvoicesRepo.findOne({
+    let objUpdated = await this.ticketsInvoicesRepo.findOne({
       where: {
         id: id
       },
       relations: {
-        tickets_categories: true,
-        // profile_users: true,
+        ticketsCategory: true,
+        customerUser: {
+          profileRole: true
+        },
+        employerUser: {
+          profileRole: true
+        },
+        ticketsItems: {
+          partsItem: {
+            partsCategory: true
+          }
+        }
       },
     });
+
+
+    //
+    if (objUpdated.ticketsItems) {
+      objUpdated['partsItems'] = objUpdated.ticketsItems.map(ticketItem => ticketItem.partsItem);
+      delete objUpdated.ticketsItems;
+    }
+
 
     return objUpdated;
   }
@@ -292,7 +357,18 @@ export class TicketsInvoicesService {
         id: id
       },
       relations: {
-        tickets_categories: true
+        ticketsCategory: true,
+        customerUser: {
+          profileRole: true
+        },
+        employerUser: {
+          profileRole: true
+        },
+        ticketsItems: {
+          partsItem: {
+            partsCategory: true
+          }
+        }
       },
     });
 
@@ -301,12 +377,18 @@ export class TicketsInvoicesService {
     }
 
 
+    //
+    if (obj.ticketsItems) {
+      obj['partsItems'] = obj.ticketsItems.map(ticketItem => ticketItem.partsItem);
+      delete obj.ticketsItems;
+    }
+
+
     ////
     const objDelete = await this.ticketsInvoicesRepo.delete(id);
 
     return objDelete;
   }
-
 
 
 

@@ -38,7 +38,7 @@ export class TicketsCategories {
 
 
   ////
-  @OneToMany(() => TicketsInvoices, (tickets_invoices) => tickets_invoices.tickets_categories)
-  tickets_invoices: TicketsInvoices[];
+  @OneToMany(() => TicketsInvoices, (ticketsInvoices) => ticketsInvoices.ticketsCategory)
+  ticketsInvoices: TicketsInvoices[];
   
 }
