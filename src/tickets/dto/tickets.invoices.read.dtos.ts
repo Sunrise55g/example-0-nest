@@ -21,6 +21,7 @@ import { ProfileUsersReadResDto } from 'src/profile/dto/profile.users.read.dtos'
 import { InvoiceStatusEnum } from '../entities/tickets.invoices.entity';
 import { TicketsCategoriesReadResDto } from './tickets.categories.read.dtos';
 import { PartsItemsReadResDto } from 'src/parts/dto/parts.items.read.dtos';
+import { TicketsItemsReadResDto } from './tickets.items.read.dtos';
 
 
 
@@ -65,8 +66,8 @@ export class TicketsInvoicesReadResDto {
 
 
   ////
-  @ApiProperty({ type: PartsItemsReadResDto })
-  partsItems: PartsItemsReadResDto;
+  @ApiProperty({ type: [TicketsItemsReadResDto] })
+  ticketsItems: PartsItemsReadResDto[];
 
 
   ////

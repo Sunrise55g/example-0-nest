@@ -110,6 +110,11 @@ export class TicketsInvoicesService {
         },
         employerUser: {
           profileRole: true
+        },
+        ticketsItems: {
+          partsItem: {
+            partsCategory: true
+          }
         }
       },
     });
@@ -117,10 +122,8 @@ export class TicketsInvoicesService {
       throw new InternalServerErrorException();
     }
 
-
+    
     //
-    obj['partsItems'] = []
-
     return objCreated;
   }
 
@@ -184,15 +187,6 @@ export class TicketsInvoicesService {
 
 
     //
-    for (let dataObj of data) {
-      if (dataObj.ticketsItems) {
-        dataObj['partsItems'] = dataObj.ticketsItems.map(ticketItem => ticketItem.partsItem);
-        delete dataObj.ticketsItems;
-      }
-    }
-
-
-    //
     const result = {
       data: data,
       count: count,
@@ -200,6 +194,7 @@ export class TicketsInvoicesService {
       page: page,
       pageCount: pageCount,
     };
+
     return result;
   }
 
@@ -246,12 +241,6 @@ export class TicketsInvoicesService {
 
 
     //
-    if (dataObj.ticketsItems) {
-      dataObj['partsItems'] = dataObj.ticketsItems.map(ticketItem => ticketItem.partsItem);
-      delete dataObj.ticketsItems;
-    }
-
-
     return dataObj;
   }
 
@@ -340,12 +329,6 @@ export class TicketsInvoicesService {
 
 
     //
-    if (objUpdated.ticketsItems) {
-      objUpdated['partsItems'] = objUpdated.ticketsItems.map(ticketItem => ticketItem.partsItem);
-      delete objUpdated.ticketsItems;
-    }
-
-
     return objUpdated;
   }
 
@@ -377,17 +360,10 @@ export class TicketsInvoicesService {
       throw new NotFoundException();
     }
 
-
-    //
-    if (obj.ticketsItems) {
-      obj['partsItems'] = obj.ticketsItems.map(ticketItem => ticketItem.partsItem);
-      delete obj.ticketsItems;
-    }
-
-
-    ////
     const objDelete = await this.ticketsInvoicesRepo.delete(id);
 
+
+    //
     return objDelete;
   }
 
