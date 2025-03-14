@@ -181,6 +181,10 @@ export class TicketsInvoicesService {
       query.leftJoinAndSelect('partsItem.partsCategory', 'partsCategory');
     }
 
+    if (!dto.sort){
+      query.orderBy('tickets_invoices.id', 'DESC');
+    }
+
     //
     let data = await query.getMany();
     const count = data.length;
