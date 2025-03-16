@@ -285,11 +285,20 @@ export class ProfileUsersService {
 
 
   async updateOneById(id: number, dto: ProfileUsersUpdateReqDto) {
+
+    this.logger.log('updateOneById: dto' + JSON.stringify(dto));
+
     if (typeof dto['email'] !== 'undefined') {
       dto.email.toLowerCase();
     }
 
-    if (dto.profileRoleId) {
+    
+    //
+    if (dto.profileRoleId as unknown as string === 'null' ) {
+      dto.profileRoleId = null
+    }
+
+    if (dto.profileRoleId && dto.profileRoleId !== null) {
       const role = await this.roleRepository.findOne({
         where: { id: dto.profileRoleId },
       });

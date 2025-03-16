@@ -24,6 +24,7 @@ import { TicketsCategoriesCoreController } from './controllers/tickets.categorie
 import { TicketsInvoicesCoreController } from './controllers/tickets.invoices.core.controller';
 import { TicketsInvoicesCurrentController } from './controllers/tickets.invoices.current.controller';
 import { TicketsItemsCoreController } from './controllers/tickets.items.core.controller';
+import { TicketsItemsCurrentController } from './controllers/tickets.items.current.controller';
 
 //
 import { TicketsCategoriesService } from './services/tickets.categories.service';
@@ -63,7 +64,8 @@ import { TicketsItemsService } from './services/tickets.items.service';
     TicketsCategoriesCoreController,
     TicketsInvoicesCoreController,
     TicketsInvoicesCurrentController,
-    TicketsItemsCoreController
+    TicketsItemsCoreController,
+    TicketsItemsCurrentController
   ],
 
   providers: [

@@ -66,21 +66,63 @@ export class TicketsItemsService {
 
 
 
-  async create(dto: TicketsItemsCreateReqDto): Promise<TicketsItemsReadResDto | any> {
+  async create(dto: TicketsItemsCreateReqDto, current: boolean = false, profileUserId?: number):
+    Promise<TicketsItemsReadResDto | any> {
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
 
     ////data check
 
     //
-    const invoicesTickets = await this.ticketsInvoicesRepo.findOne({
-      where: {
-        id: dto.ticketsInvoiceId
-      },
-    });
-    if (!invoicesTickets) {
-      throw new BadRequestException({
-        message: 'Tickets with this ticketsInvoiceId not found',
+    if (current === false) {
+
+      let invoicesTickets = await this.ticketsInvoicesRepo.findOne({
+        where: {
+          id: dto.ticketsInvoiceId,
+        },
       });
+
+      if (!invoicesTickets) {
+        throw new BadRequestException({
+          message: 'Tickets with this ticketsInvoiceId not found',
+        });
+      }
+
     }
+
+    //
+    else {
+      //
+      let invoicesTickets = await this.ticketsInvoicesRepo.findOne({
+        where: {
+          id: dto.ticketsInvoiceId,
+          customerUserId: profileUserId
+        },
+      });
+
+      if (!invoicesTickets) {
+        invoicesTickets = await this.ticketsInvoicesRepo.findOne({
+          where: {
+            id: dto.ticketsInvoiceId,
+            employerUserId: profileUserId
+          },
+        })
+      }
+
+      if (!invoicesTickets) {
+        throw new BadRequestException({
+          message: 'Tickets with this ticketsInvoiceId not found',
+        });
+      }
+
+    }
+
 
     //
     const partsItem = await this.partsItemsRepo.findOne({
@@ -115,7 +157,8 @@ export class TicketsItemsService {
 
 
   async findMany(dto: QueryBulkDto) {
-    //
+
+    ////
     const repo = this.ticketsItemsRepo;
     const dbTable = 'tickets_items';
 
@@ -179,6 +222,7 @@ export class TicketsItemsService {
 
 
   async findOne(id: number, dto: QueryDto) {
+
     //
     const repo = this.ticketsItemsRepo;
     const dbTable = 'tickets_items';
@@ -210,16 +254,51 @@ export class TicketsItemsService {
 
 
 
-  async removeOneById(id: number) {
+  async removeOneById(id: number, current: boolean = false, profileUserId?: number) {
 
-    const obj = await this.ticketsItemsRepo.findOne({
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+
+    //// find item
+    const ticketsItem = await this.ticketsItemsRepo.findOne({
       where: {
         id: id
       },
     });
 
-    if (!obj) {
+    if (!ticketsItem) {
       throw new NotFoundException();
+    }
+
+
+    //// find invoice for current
+    if (current === true) {
+      let ticketsInvoce = await this.ticketsInvoicesRepo.findOne({
+        where: {
+          id: ticketsItem.ticketsInvoiceId,
+          customerUserId: profileUserId
+        },
+      });
+
+      if (!ticketsInvoce) {
+        ticketsInvoce = await this.ticketsInvoicesRepo.findOne({
+          where: {
+            id: ticketsItem.ticketsInvoiceId,
+            employerUserId: profileUserId
+          },
+        })
+      }
+
+      if (!ticketsInvoce) {
+        throw new BadRequestException({
+          message: 'Tickets with this ticketsInvoiceId not found',
+        });
+      }
     }
 
 

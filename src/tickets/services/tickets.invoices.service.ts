@@ -84,7 +84,6 @@ export class TicketsInvoicesService {
 
     if (current === false && !dto.customerUserId && profileUserId) {
       dto.customerUserId = profileUserId;
-      this.logger.log(`dto: ${JSON.stringify(dto)}`);
     }
 
     if (current === false && !dto.customerUserId && !profileUserId) {
