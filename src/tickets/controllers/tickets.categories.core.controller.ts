@@ -50,7 +50,6 @@ export class TicketsCategoriesCoreController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  // @RoleAuth('moderator')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
@@ -59,10 +58,21 @@ export class TicketsCategoriesCoreController {
     return this.ticketsCategoriesService.findMany(dto);
   }
 
+
+  @Get('totalCount')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @RoleAuth('moderator')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get total count' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: Number })
+  totalCount(@Request() req) {
+    return this.ticketsCategoriesService.totalCount();
+  }
+
   
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  // @RoleAuth('moderator')
   @ApiOperation({ summary: 'Get one' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: TicketsCategoriesReadResDto })

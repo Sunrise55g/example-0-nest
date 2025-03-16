@@ -70,22 +70,5 @@ export class ProfileUserCurrentController {
     return this.profileUsersService.updatePassword(req.user.id, dto);
   }
 
-
-  @Get('/totalCount')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  @ApiOperation({ summary: 'Get total count' })
-  @ApiResponse({ status: 200, type: Number })
-  async totalCount() {
-    const dto = {
-      fields: [`id`],
-      joinDisable: true
-    } as unknown as QueryBulkDto
-
-    const usersList = await this.profileUsersService.findMany(dto)
-    const count = usersList.count || 0;
-
-    return count;
-  }
-
-
+  
 }

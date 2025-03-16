@@ -13,7 +13,6 @@ import { PartsItems } from './entities/parts.items.entity';
 //
 import { PartsCategoriesCoreController } from './controllers/parts.categories.core.controller';
 import { PartsItemsCoreController } from './controllers/parts.items.core.controller';
-import { PartsItemsCurrentController } from './controllers/parts.items.current.controller';
 
 //
 import { PartsCategoriesService } from './services/parts.categories.service';
@@ -44,8 +43,7 @@ import { PartsItemsService } from './services/parts.items.service';
 
   controllers: [
     PartsCategoriesCoreController,
-    PartsItemsCoreController,
-    PartsItemsCurrentController
+    PartsItemsCoreController
   ],
 
   providers: [

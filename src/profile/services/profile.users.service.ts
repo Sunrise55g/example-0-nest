@@ -112,25 +112,6 @@ export class ProfileUsersService {
   }
 
 
-
-
-  async findOneByPhone(phone: string) {
-    const user = await this.profileUsersRepo
-      .createQueryBuilder('profile_users')
-      .addSelect('profile_users.passwordHash')
-      .where('profile_users.phone = :phone', { phone: phone })
-
-      // for roles
-      .leftJoinAndSelect(
-        'profile_users.profileRole', 'profileRole',
-      )
-
-      .getOne();
-
-    return user;
-  }
-
-
   // simple
   async create(dto: ProfileUsersCreateReqDto): Promise<ProfileUsersReadResDto> {
 
@@ -174,18 +155,7 @@ export class ProfileUsersService {
       }
     }
 
-    if (typeof dto['phone'] !== 'undefined') {
-      const existPhone = await this.profileUsersRepo.findOne({
-        where: { phone: dto.phone },
-      });
-      if (existPhone) {
-        throw new BadRequestException({
-          message: 'User with this Pnone Number is exist.',
-        });
-      }
-    }
-
-
+    
     //// Create profile user
     const { password, ...dataAdded } = dto;
 
@@ -253,6 +223,11 @@ export class ProfileUsersService {
       query.leftJoinAndSelect(
         'profile_users.profileRole', 'profileRole'
       );
+    }
+
+    //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
     }
 
     //

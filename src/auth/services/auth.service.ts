@@ -44,8 +44,6 @@ export class AuthService {
     if (typeof dto['username'] === 'undefined') {
       if (typeof dto['email'] !== 'undefined') {
         dto.username = dto.email;
-      } else if (typeof dto['phone'] !== 'undefined') {
-        dto.username = dto.phone;
       }
     }
 
@@ -152,37 +150,6 @@ export class AuthService {
     const result = { user, token };
     return result;
   }
-
-
-  // login by phone
-  async loginByPhone(phone: string, password: string): Promise<any> {
-    const userObj = await this.profileUsersService.findOneByPhone(phone);
-
-    //
-    if (!userObj) {
-      throw new UnauthorizedException('User not found!');
-    }
-    if (userObj.active == false) {
-      throw new NotFoundException('User is not active!');
-    }
-    
-    //
-    const passwordIsMatch = await argon2.verify(userObj.passwordHash, password);
-
-    if (userObj && passwordIsMatch) {
-      const { passwordHash, ...user } = userObj;
-      const token = this.jwtService.sign({
-        id: userObj.id,
-        username: userObj.username,
-      });
-
-      const result = { user, token };
-      return result;
-    }
-
-    throw new UnauthorizedException('Phone or password are incorrect!');
-  }
-
 
 
 

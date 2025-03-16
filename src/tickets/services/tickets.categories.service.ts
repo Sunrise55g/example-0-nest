@@ -18,7 +18,7 @@ import { QueryBulkDto, QueryDto } from 'src/common/dto/query.dto';
 //
 import { TicketsCategories } from '../entities/tickets.categories.entity';
 //
-import { TicketsCategoriesCreateReqDto} from '../dto/tickets.categories.create.dtos';
+import { TicketsCategoriesCreateReqDto } from '../dto/tickets.categories.create.dtos';
 import { TicketsCategoriesReadResDto, TicketsCategoriesReadBulkResDto } from '../dto/tickets.categories.read.dtos';
 import { TicketsCategoriesUpdateReqDto } from '../dto/tickets.categories.update.dtos';
 
@@ -31,7 +31,7 @@ export class TicketsCategoriesService {
   constructor(
     @InjectRepository(TicketsCategories)
     private ticketsCategoriesRepo: Repository<TicketsCategories>,
-  ) {}
+  ) { }
 
 
 
@@ -80,6 +80,11 @@ export class TicketsCategoriesService {
     query.skip(offset).take(limit);
 
     //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
+    }
+
+    //
     const data = await query.getMany();
     const count = data.length;
 
@@ -126,7 +131,7 @@ export class TicketsCategoriesService {
   async updateOneById(id: number, dto: TicketsCategoriesUpdateReqDto) {
 
     const obj = await this.ticketsCategoriesRepo.findOne({
-      where: { 
+      where: {
         id: id
       },
     });
@@ -149,8 +154,8 @@ export class TicketsCategoriesService {
   async removeOneById(id: number) {
 
     const obj = await this.ticketsCategoriesRepo.findOne({
-      where: { 
-        id: id, 
+      where: {
+        id: id,
       },
     });
     if (!obj) {
@@ -158,9 +163,28 @@ export class TicketsCategoriesService {
     }
 
     const objDelete = await this.ticketsCategoriesRepo.delete(id);
-    
+
     return objDelete;
   }
 
-  
+
+  async totalCount() {
+
+    //
+    const repo = this.ticketsCategoriesRepo;
+    const dbTable = 'tickets_categories';
+
+
+    let query = repo
+      .createQueryBuilder(dbTable)
+      .select([`${dbTable}.id, ${dbTable}.createdAt`])
+
+
+    let data = await query.getRawMany();
+    const count = data.length;
+
+    return count;
+  }
+
+
 }

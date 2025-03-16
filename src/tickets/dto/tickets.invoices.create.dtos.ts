@@ -20,8 +20,8 @@ export class TicketsInvoicesCreateReqDto {
 
 
   ////
-  @IsNotEmpty()
-  @ApiProperty({ example: 1, description: 'customerUserId'})
+  @IsOptional()
+  @ApiProperty({ example: 1, description: 'customerUserId', required: false})
   customerUserId: number;
 
 

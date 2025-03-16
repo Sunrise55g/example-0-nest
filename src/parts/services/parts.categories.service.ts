@@ -19,7 +19,7 @@ import { QueryBulkDto, QueryDto } from 'src/common/dto/query.dto';
 import { PartsCategories } from '../entities/parts.categories.entity';
 import { PartsItems } from '../entities/parts.items.entity';
 //
-import { PartsCategoriesCreateReqDto} from '../dto/parts.categories.create.dtos';
+import { PartsCategoriesCreateReqDto } from '../dto/parts.categories.create.dtos';
 import { PartsCategoriesReadResDto, PartsCategoriesReadBulkResDto } from '../dto/parts.categories.read.dtos';
 import { PartsCategoriesUpdateReqDto } from '../dto/parts.categories.update.dtos';
 
@@ -32,7 +32,7 @@ export class PartsCategoriesService {
   constructor(
     @InjectRepository(PartsCategories)
     private partsCategoriesRepo: Repository<PartsCategories>,
-  ) {}
+  ) { }
 
 
 
@@ -81,6 +81,11 @@ export class PartsCategoriesService {
     query.skip(offset).take(limit);
 
     //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
+    }
+
+    //
     const data = await query.getMany();
     const count = data.length;
 
@@ -127,7 +132,7 @@ export class PartsCategoriesService {
   async updateOneById(id: number, dto: PartsCategoriesUpdateReqDto) {
 
     const obj = await this.partsCategoriesRepo.findOne({
-      where: { 
+      where: {
         id: id
       },
     });
@@ -150,8 +155,8 @@ export class PartsCategoriesService {
   async removeOneById(id: number) {
 
     const obj = await this.partsCategoriesRepo.findOne({
-      where: { 
-        id: id, 
+      where: {
+        id: id,
       },
     });
     if (!obj) {
@@ -159,9 +164,9 @@ export class PartsCategoriesService {
     }
 
     const objDelete = await this.partsCategoriesRepo.delete(id);
-    
+
     return objDelete;
   }
 
-  
+
 }

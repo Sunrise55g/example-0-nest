@@ -49,8 +49,7 @@ export class ProfileRolesCoreController {
 
 
   @Get()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @RoleAuth('moderator')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
@@ -59,10 +58,26 @@ export class ProfileRolesCoreController {
     return this.profileRolesService.findMany(dto);
   }
 
+
+  @Get('/totalCount')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get total count' })
+  @ApiResponse({ status: 200, type: Number })
+  async totalCount() {
+    const dto = {
+      fields: [`id`],
+      joinDisable: true
+    } as unknown as QueryBulkDto
+
+    const usersList = await this.profileRolesService.findMany(dto)
+    const count = usersList.count || 0;
+
+    return count;
+  }
+
   
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @RoleAuth('moderator')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get one' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: ProfileRolesReadResDto })

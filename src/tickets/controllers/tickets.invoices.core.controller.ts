@@ -45,8 +45,8 @@ export class TicketsInvoicesCoreController {
   @ApiOperation({ summary: 'Create one' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: TicketsInvoicesReadResDto })
-  create(@Body() dto: TicketsInvoicesCreateReqDto,) {
-    return this.ticketsInvoicesService.create(dto);
+  create(@Request() req, @Body() dto: TicketsInvoicesCreateReqDto,) {
+    return this.ticketsInvoicesService.create(dto, false, +req.user.id);
   }
 
 

@@ -38,6 +38,28 @@ export class TicketsInvoicesCurrentController {
   constructor(private readonly ticketsInvoicesService: TicketsInvoicesService) { }
 
 
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @ApiOperation({ summary: 'Create one' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: TicketsInvoicesReadResDto })
+  create(@Request() req, @Body() dto: TicketsInvoicesCreateReqDto,) {
+    return this.ticketsInvoicesService.create(dto, true, +req.user.id);
+  }
+
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Get many' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: TicketsInvoicesReadBulkResDto })
+  findMany(@Request() req, @Query() dto: QueryBulkDto) {
+    return this.ticketsInvoicesService.findMany(dto, true, +req.user.id);
+  }
+
+
   @Get('totalCount')
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -57,6 +79,27 @@ export class TicketsInvoicesCurrentController {
   @ApiResponse({ status: 200 })
   statsByDays(@Request() req) {
     return this.ticketsInvoicesService.statsByDays(true, req.user.id);
+  }
+
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get one' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: TicketsInvoicesReadResDto })
+  findOne(@Request() req, @Param('id') id: string, @Query() dto: QueryDto) {
+    return this.ticketsInvoicesService.findOne(+id, dto, true, +req.user.id);
+  }
+
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @ApiOperation({ summary: 'Path one' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: TicketsInvoicesReadResDto })
+  updateOneById(@Request() req, @Param('id') id: string, @Body() dto: TicketsInvoicesUpdateReqDto) {
+    return this.ticketsInvoicesService.updateOneById(+id, dto, true, +req.user.id);
   }
 
 

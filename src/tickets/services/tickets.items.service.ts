@@ -55,7 +55,7 @@ export class TicketsItemsService {
     @InjectRepository(PartsItems)
     private partsItemsRepo: Repository<PartsItems>,
 
-   //
+    //
     @InjectRepository(TicketsInvoices)
     private ticketsInvoicesRepo: Repository<TicketsInvoices>,
 
@@ -102,7 +102,7 @@ export class TicketsItemsService {
       where: {
         id: obj.id
       },
-  
+
     });
     if (!objCreated) {
       throw new InternalServerErrorException();
@@ -152,7 +152,12 @@ export class TicketsItemsService {
 
     //
     if (!dto.join) {
-  
+
+    }
+
+    //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
     }
 
     //
@@ -191,7 +196,7 @@ export class TicketsItemsService {
 
     //
     if (!dto.join) {
-      
+
     }
 
     //

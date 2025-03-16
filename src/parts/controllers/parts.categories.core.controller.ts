@@ -50,7 +50,6 @@ export class PartsCategoriesCoreController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  // @RoleAuth('moderator')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Get many' })
   @ApiBearerAuth()
@@ -62,7 +61,6 @@ export class PartsCategoriesCoreController {
   
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  // @RoleAuth('moderator')
   @ApiOperation({ summary: 'Get one' })
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: PartsCategoriesReadResDto })

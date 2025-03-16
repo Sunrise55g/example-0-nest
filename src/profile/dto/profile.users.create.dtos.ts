@@ -34,7 +34,6 @@ export class ProfileUsersCreateReqDto {
   email: string;
 
   @IsOptional()
-  @IsPhoneNumber()
   @ApiProperty({ example: '+79372222222', description: 'Phone number', required: false })
   phone: string;
 

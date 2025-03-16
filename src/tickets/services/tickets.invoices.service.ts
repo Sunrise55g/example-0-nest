@@ -67,7 +67,32 @@ export class TicketsInvoicesService {
 
 
 
-  async create(dto: TicketsInvoicesCreateReqDto): Promise<TicketsInvoicesReadResDto | any> {
+  async create(dto: TicketsInvoicesCreateReqDto, current: boolean = false, profileUserId?: number):
+    Promise<TicketsInvoicesReadResDto | any> {
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+    if (current === true && profileUserId) {
+      dto.customerUserId = profileUserId;
+    }
+
+
+    if (current === false && !dto.customerUserId && profileUserId) {
+      dto.customerUserId = profileUserId;
+      this.logger.log(`dto: ${JSON.stringify(dto)}`);
+    }
+
+    if (current === false && !dto.customerUserId && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No customerUserId',
+      });
+    }
+
 
     ////data check
 
@@ -94,6 +119,7 @@ export class TicketsInvoicesService {
         message: 'Customer with this customerUserId not found',
       });
     }
+    // this.logger.log(`customerUser: ${JSON.stringify(customerUser)}`);
 
 
     //
@@ -122,7 +148,7 @@ export class TicketsInvoicesService {
       throw new InternalServerErrorException();
     }
 
-    
+
     //
     return objCreated;
   }
@@ -131,13 +157,28 @@ export class TicketsInvoicesService {
 
 
   async findMany(dto: QueryBulkDto, current: boolean = false, profileUserId?: number) {
-    //
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+
+    ////
     const repo = this.ticketsInvoicesRepo;
     const dbTable = 'tickets_invoices';
 
     //
     let query = repo
       .createQueryBuilder(dbTable)
+
+
+    if (current === true) {
+      query.where(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+      query.orWhere(`${dbTable}.employerUserId = :employerUserId`, { employerUserId: profileUserId });
+    }
 
     // params from query
     query = fieldsHandler(dto, dbTable, query);
@@ -181,8 +222,9 @@ export class TicketsInvoicesService {
       query.leftJoinAndSelect('partsItem.partsCategory', 'partsCategory');
     }
 
-    if (!dto.sort){
-      query.orderBy('tickets_invoices.id', 'DESC');
+    //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
     }
 
     //
@@ -206,7 +248,16 @@ export class TicketsInvoicesService {
 
 
   async findOne(id: number, dto: QueryDto, current: boolean = false, profileUserId?: number) {
-    //
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
+
+    ////
     const repo = this.ticketsInvoicesRepo;
     const dbTable = 'tickets_invoices';
 
@@ -214,6 +265,12 @@ export class TicketsInvoicesService {
     let query = repo
       .createQueryBuilder(dbTable)
       .where(`${dbTable}.id = :id`, { id: id })
+
+
+    if (current === true) {
+      query.where(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+      query.orWhere(`${dbTable}.employerUserId = :employerUserId`, { employerUserId: profileUserId });
+    }
 
 
     // params from query
@@ -252,6 +309,14 @@ export class TicketsInvoicesService {
 
 
   async updateOneById(id: number, dto: TicketsInvoicesUpdateReqDto, current: boolean = false, profileUserId?: number) {
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
 
     //// check data
     //
@@ -299,16 +364,42 @@ export class TicketsInvoicesService {
 
 
     ////
-    const obj = await this.ticketsInvoicesRepo.findOne({
-      where: {
-        id: id
-      },
-    });
-    if (!obj) {
-      throw new NotFoundException();
+    if (current !== false) {
+      let obj = await this.ticketsInvoicesRepo.findOne({
+        where: {
+          id: id
+        },
+      });
+      if (!obj) {
+        throw new NotFoundException();
+      }
     }
 
-    //
+
+    if (current === true) {
+      let obj = await this.ticketsInvoicesRepo.findOne({
+        where: {
+          id: id,
+          customerUserId: profileUserId
+        }
+      });
+
+      if (!obj) {
+        obj = await this.ticketsInvoicesRepo.findOne({
+          where: {
+            id: id,
+            employerUserId: profileUserId
+          }
+        });
+      }
+
+      if (!obj) {
+        throw new NotFoundException();
+      }
+    }
+
+
+    ////
     const objUpdate = await this.ticketsInvoicesRepo.save({ id, ...dto });
 
     let objUpdated = await this.ticketsInvoicesRepo.findOne({
@@ -339,6 +430,14 @@ export class TicketsInvoicesService {
 
 
   async removeOneById(id: number, current: boolean = false, profileUserId?: number) {
+
+    //// Profile User from current
+    if (current === true && !profileUserId) {
+      throw new BadRequestException({
+        message: 'No profileUserId',
+      });
+    }
+
 
     const obj = await this.ticketsInvoicesRepo.findOne({
       where: {
@@ -375,7 +474,7 @@ export class TicketsInvoicesService {
 
   async totalCount(current: boolean = false, profileUserId?: number) {
 
-    // check for current user
+    //// check for current user
     if (current === true && !profileUserId) {
       throw new BadRequestException({
         message: 'No profileUserId',
@@ -395,6 +494,7 @@ export class TicketsInvoicesService {
 
     if (current === true) {
       query.where(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+      query.orWhere(`${dbTable}.employerUserId = :employerUserId`, { employerUserId: profileUserId });
     }
 
 
@@ -432,7 +532,8 @@ export class TicketsInvoicesService {
 
     //
     if (current === true) {
-      query.andWhere(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+      query.where(`${dbTable}.customerUserId = :customerUserId`, { customerUserId: profileUserId });
+      query.orWhere(`${dbTable}.employerUserId = :employerUserId`, { employerUserId: profileUserId });
     }
 
     //

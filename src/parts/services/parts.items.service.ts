@@ -130,6 +130,11 @@ export class PartsItemsService {
     }
 
     //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
+    }
+
+    //
     const data = await query.getMany();
     const count = data.length;
 

@@ -20,7 +20,7 @@ import { ProfileRoles } from 'src/profile/entities/profile.roles.entity';
 import { ProfileUsers } from 'src/profile/entities/profile.users.entity';
 
 //
-import { ProfileRolesCreateReqDto} from '../dto/profile.roles.create.dtos';
+import { ProfileRolesCreateReqDto } from '../dto/profile.roles.create.dtos';
 import { ProfileRolesReadResDto, ProfileRolesReadBulkResDto } from '../dto/profile.roles.read.dtos';
 import { ProfileRolesUpdateReqDto } from '../dto/profile.roles.update.dtos';
 
@@ -33,7 +33,7 @@ export class ProfileRolesService {
   constructor(
     @InjectRepository(ProfileRoles)
     private roleRepository: Repository<ProfileRoles>,
-  ) {}
+  ) { }
 
 
 
@@ -82,6 +82,11 @@ export class ProfileRolesService {
     query.skip(offset).take(limit);
 
     //
+    if (!dto.sort) {
+      query.orderBy(`${dbTable}.id`, 'DESC');
+    }
+
+    //
     const data = await query.getMany();
     const count = data.length;
 
@@ -128,7 +133,7 @@ export class ProfileRolesService {
   async updateOneById(id: number, dto: ProfileRolesUpdateReqDto) {
 
     const role = await this.roleRepository.findOne({
-      where: { 
+      where: {
         id: id
       },
     });
@@ -151,8 +156,8 @@ export class ProfileRolesService {
   async removeOneById(id: number) {
 
     const role = await this.roleRepository.findOne({
-      where: { 
-        id: id, 
+      where: {
+        id: id,
       },
     });
     if (!role) {
@@ -160,9 +165,9 @@ export class ProfileRolesService {
     }
 
     const roleUpdate = await this.roleRepository.delete(id);
-    
+
     return role;
   }
 
-  
+
 }

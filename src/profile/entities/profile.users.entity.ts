@@ -45,9 +45,8 @@ export class ProfileUsers {
   lastName: string;
 
   
-
   ////
-  @Column({ default: false })
+  @Column({ default: true })
   active: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
