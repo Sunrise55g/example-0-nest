@@ -12,11 +12,29 @@
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	// "forwardPorts": [
+	// 	5432,
+	// 	5433,
+	// 	4000
+	// ],
+	// "runArgs": [
+	// 	"-p", "5432:5432",
+	// 	"-p", "5433:5433",
+	// 	"-p", "4000:4000"
+	// ],
+	"runArgs": [
+		"-p",
+		"5432:5432",
+		"-p",
+		"5433:5433",
+		"-p",
+		"4000:4000",
+		"--add-host=host.docker.internal:host-gateway"
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bash /workspaces/example-0-nest/.devcontainer/post-create.sh"
+	"postCreateCommand": "bash /workspaces/example-0-nest/.devcontainer/post-create.sh",
 	// Configure tool-specific properties.
 	// "customizations": {},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"remoteUser": "root"
 }

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 
-apt-get update
-apt-get upgrade -y
-apt-get install -y mc net-tools curl ca-certificates
+# apt-get update
+# apt-get upgrade -y
+# apt-get install -y mc net-tools curl ca-certificates/
 
 
 # python
@@ -11,18 +11,18 @@ apt-get install -y mc net-tools curl ca-certificates
 
 
 # docker
-apt-get upgrade -y docker-compose
+# apt-get upgrade -y docker-compose
 
 
 # node
-wget -q -O- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+# wget -q -O- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
-export NVM_DIR="/root/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# export NVM_DIR="/root/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-nvm install --lts
-nvm use --lts
+# nvm install --lts
+# nvm use --lts
 
-npm i -g --update npm
-npm i -g nest-cli
-npm i -g pnpm
+# npm i -g --update npm
+# npm i -g nest-cli
+# npm i -g pnpm
