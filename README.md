@@ -110,6 +110,7 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - docker exec -i example-0-nest-postgres dropdb example-0
 - docker exec -i example-0-nest-postgres createdb example-0
 - docker exec -i example-0-nest-postgres psql example-0 < ./dumps/example-0.sql
+- Get-Content .\dumps\example-0.sql | docker exec -i example-0-nest-postgres psql example-0
 
 #### Restore PostgreSQL dump for error:
 - docker exec -i example-0-nest-postgres createdb example-0
