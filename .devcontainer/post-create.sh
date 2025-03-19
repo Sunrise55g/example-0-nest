@@ -2,7 +2,13 @@
 apt-get update && apt-get upgrade -y
 apt-get install -y mc net-tools curl ca-certificates
 
-# Установка Node.js через nvm
+
+# docker-compose
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+
+# node.js
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -12,9 +18,6 @@ npm install -g npm
 npm install -g nest-cli
 npm install -g pnpm
 
-# Установка docker-compose
-curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
 
-# Запуск docker-compose (убери, если хочешь вручную)
+# run
 docker-compose -f /workspaces/example-0-nest/docker-compose-dev.yml up -d
