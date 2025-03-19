@@ -19,12 +19,10 @@
 	// 	4000
 	// ],
 	"runArgs": [
-		"-p",
-		"5432:5432",
-		"-p",
-		"5433:5433",
-		"-p",
-		"4000:4000"
+		"--name", "example-0-nest-dev",
+		"-p", "5432:5432",
+		"-p", "5433:5433",
+		"-p", "4000:4000"
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "bash /workspaces/example-0-nest/.devcontainer/post-create.sh"
